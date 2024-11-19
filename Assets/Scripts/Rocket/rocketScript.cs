@@ -8,7 +8,6 @@ using UnityEngine.UI;
 public class rocketScript : MonoBehaviour
 {
   public static rocketScript Instance;
-
   public bool isLaunching{get; set;} = false;
   private bool readyTolaunch = false; //make sure that rocket wont launch until a new value for thrust is set
   private bool reverseSlider;
@@ -31,8 +30,6 @@ public class rocketScript : MonoBehaviour
   private void Update() {
     handleLaunchInput();
     handleThrustInput();
-
-
   }
 
   void FixedUpdate() {
@@ -49,7 +46,7 @@ public class rocketScript : MonoBehaviour
         isLaunching = false;
         readyTolaunch = false;
         rocketStatScript.Instance.currentFuel = rocketStatScript.Instance.maxFuel;
-        uiScript.launchingRocketUi(true);
+        uiScript.launchingRocketUiButton(true);
       }
     }
   }
@@ -57,9 +54,10 @@ public class rocketScript : MonoBehaviour
   void handleLaunchInput(){
     //to make sure rocket cant launh again when on rocket is launching or falling 
     if(!isLaunching && rb.velocity == Vector2.zero){
-      //launch the rocket    
-      if(Input.GetKeyDown(KeyCode.Space) && readyTolaunch){
+      //launch the rocket if ready to launch and shop panel is close
+      if(Input.GetKeyDown(KeyCode.Space) && readyTolaunch && !uiScript.isShopPanelOpen){
         isLaunching = true;
+        playerScoreScript.Instance.highestRocketReach = 0;
       }
     }
   }
@@ -68,7 +66,8 @@ public class rocketScript : MonoBehaviour
     //handle the value of the thrust base on where the slider stop
     //the slider will increment and edecrement while holding the F key when release
     //it will get the last value of the slider and assign it to the launchRocker();
-    if(Input.GetKey(KeyCode.F) && !rocketScript.Instance.isLaunching ){        
+    //cant set the thrust when shop panel is open
+    if(Input.GetKey(KeyCode.F) && !rocketScript.Instance.isLaunching && !uiScript.isShopPanelOpen){        
       if(rocketThrustSlider.value <= rocketThrustSlider.maxValue && !reverseSlider){
         rocketThrustSlider.value += 30f * Time.deltaTime;
         if(rocketThrustSlider.value == rocketThrustSlider.maxValue){
@@ -82,12 +81,12 @@ public class rocketScript : MonoBehaviour
         }
       }
     }
-    if(Input.GetKeyUp(KeyCode.F)){
+    if(Input.GetKeyUp(KeyCode.F)&& !uiScript.isShopPanelOpen){
       //assign the new value to newThrustValue
       newThrustValue = rocketThrustSlider.value;
       //when set to true player can now launch by pressing space
       readyTolaunch = true;
-      uiScript.launchingRocketUi(false);
+      uiScript.launchingRocketUiButton(false);
     }
 
     return newThrustValue;
@@ -105,4 +104,5 @@ public class rocketScript : MonoBehaviour
     //Debug.Log("s");
     rb.AddForce(resistance);
   }
+  
 }

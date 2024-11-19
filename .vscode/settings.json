@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "AGP_Final.sln"
+    "dotnet.defaultSolution": "AGP_Final_Ramos.sln"
 }

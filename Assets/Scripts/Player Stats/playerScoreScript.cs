@@ -1,47 +1,57 @@
-using System.Collections;
-using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class playerScoreScript : MonoBehaviour
 {
     public static playerScoreScript Instance;
-    private float distanceToGrond;
-    public float finalDistanceBeforeFall{get; set;}
-    public float getScore{get; set;}
-    private float scoreMultiplier = 2f;
-    private bool isFalling = false;
+    private Rigidbody2D rb;
+    private float distToGround;
+    public float highestRocketReach{get; set;} 
+    public bool hasFlown {get; set;}
+    public bool showPanel {get; set;}
+    [SerializeField] GameObject rocket;
+    [SerializeField] Transform ground;
 
-    void Awake(){
+    private void Awake(){
         Instance = this;
+        rb = rocket.GetComponent<Rigidbody2D>();
     }
+
     private void Update() {
-        distanceToGround();
-        storeScoreAndFinalDist();
+        getDistance(); 
+        CheckRocketState();
     }
-    public float distanceToGround(){
-        var rocketObj = GameObject.Find("Rocket");
-        var groundObj = GameObject.Find("ground");
-
-        var rocketBounds = rocketObj.GetComponent<BoxCollider2D>().bounds;
-        var groundBounds = groundObj.GetComponent<BoxCollider2D>().bounds;
-
-        // Distance from the rocket collider bottom edge to the ground collider top edge
-        return distanceToGrond = rocketBounds.min.y - groundBounds.max.y;
-    }
-    void storeScoreAndFinalDist(){
-        var rb = GameObject.Find("Rocket").GetComponent<Rigidbody2D>();
-
-        // Check if the rocket's velocity is transitioning from upward to downward
-        if (rb.velocity.y < 0 && !isFalling && rocketScript.Instance.isLaunching){
-            isFalling = true; // Rocket is now falling
-            finalDistanceBeforeFall = distanceToGround(); // Store the final distance
+    public float getDistance(){
+        // Calculate distance to the ground
+        distToGround = Vector2.Distance(ground.position, rocket.transform.position) - 1;
+        if (rb.velocity.y > 0){
+            // Update highest position   |  return the highest value between this two
+            highestRocketReach = Mathf.Max(highestRocketReach, distToGround);
         }
-        else if (rb.velocity.y == 0){
-            isFalling = false; // Reset if the rocket is not falling
+        return distToGround;
+    }
+    private void CheckRocketState()
+    {
+        //set the hast flown and show panel when condition is met
+        if (rb.velocity.y > 0 && !hasFlown && rocketScript.Instance.isLaunching)
+        {
+            hasFlown = true; 
+            showPanel = false;
+        }
+        else if (hasFlown && rb.velocity.y == 0)
+        {
+            //rocket has landed after flying
+            showPanel = true;
         }
     }
-    public float playerScore(){
-        //roundoff to the nearest number
-        return Mathf.Round(finalDistanceBeforeFall * scoreMultiplier);
+    public float getScore(){
+        return getHighestRocketReach() * 2;
+    }
+    public float getHighestRocketReach(){
+        return highestRocketReach;
+    }
+    public int getCurrency(){
+        //TODO: get currency
+        return 0;
     }
 }
