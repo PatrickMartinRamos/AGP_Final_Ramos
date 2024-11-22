@@ -8,7 +8,7 @@ public class playerScoreScript : MonoBehaviour
     private float distToGround;
     public float highestRocketReach{get; set;} 
     public bool hasFlown {get; set;}
-    public bool showPanel {get; set;}
+    public bool showResultPanel {get; set;}
     [SerializeField] GameObject rocket;
     [SerializeField] Transform ground;
 
@@ -22,10 +22,10 @@ public class playerScoreScript : MonoBehaviour
         CheckRocketState();
     }
     public float getDistance(){
-        // Calculate distance to the ground
+        //calculate distance to the ground
         distToGround = Vector2.Distance(ground.position, rocket.transform.position) - 1;
         if (rb.velocity.y > 0){
-            // Update highest position   |  return the highest value between this two
+            //update highest position   |  return the highest value between this two
             highestRocketReach = Mathf.Max(highestRocketReach, distToGround);
         }
         return distToGround;
@@ -33,15 +33,13 @@ public class playerScoreScript : MonoBehaviour
     private void CheckRocketState()
     {
         //set the hast flown and show panel when condition is met
-        if (rb.velocity.y > 0 && !hasFlown && rocketScript.Instance.isLaunching)
-        {
+        if (rb.velocity.y > 0 && !hasFlown && rocketScript.Instance.isLaunching){
             hasFlown = true; 
-            showPanel = false;
+            showResultPanel = false;
         }
-        else if (hasFlown && rb.velocity.y == 0)
-        {
+        else if (hasFlown && rb.velocity.y == 0){
             //rocket has landed after flying
-            showPanel = true;
+            showResultPanel = true;
         }
     }
     public float getScore(){
@@ -49,9 +47,5 @@ public class playerScoreScript : MonoBehaviour
     }
     public float getHighestRocketReach(){
         return highestRocketReach;
-    }
-    public int getCurrency(){
-        //TODO: get currency
-        return 0;
     }
 }

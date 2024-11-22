@@ -12,9 +12,22 @@ public class buttonScript : MonoBehaviour
     }
     public void upgradeMaxThrustBtn(){
         //TODO: dito lagay logic na i-increment value ng maxthrust
-        gameUiScript.toggleThrustUpgradeUi();
-        upgradeManagerScript.upgradeThrustBaseShip_1(1);
+        gameUiScript.toggleMaxThrustUpgradeUi();
+        upgradeManagerScript.upgradeMaxThrust();
     }
+    public void upgradeThrustControlSpeedBtn(){
+        //TODO: dito lagay logic na i-increment value ng maxthrust
+        gameUiScript.toggleThrustControlSpeedUpgradeUi();
+        upgradeManagerScript.upgradeThrustControlSpeed();
+    }
+    public void upgradeMaxFuelBtn(){
+        gameUiScript.toggleMaxFuelUpgradeUi();
+        upgradeManagerScript.upgradeMaxFuel();
+        //when upgrade max button is click set the current fuel to max fuel because the max fuel has a new value
+        rocketStatScript.Instance.currentFuel = rocketStatScript.Instance.maxFuel; 
+    }
+
+
     public void openShopPanelUiBtn(){
         gameUiScript.showShopPanelUi().gameObject.SetActive(true);
         gameUiScript.isShopPanelOpen = true;
@@ -25,7 +38,7 @@ public class buttonScript : MonoBehaviour
     }
     public void closeResultPanelUi(){
         //reset the rocket state
-        playerScoreScript.Instance.showPanel = false;
+        playerScoreScript.Instance.showResultPanel = false;
         playerScoreScript.Instance.hasFlown = false;
     }
 }
