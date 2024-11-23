@@ -45,6 +45,7 @@ public class rocketScript : MonoBehaviour
   }
 
   void clampRocketX(){
+    //clamp player movement between min and max
     float clampedX = Mathf.Clamp(transform.position.x, minX, maxX);
     transform.position = new Vector3(clampedX, transform.position.y, transform.position.z);
   }
@@ -114,6 +115,7 @@ public class rocketScript : MonoBehaviour
   }
 
   void launchRocket(){
+    //launch the rocket using add force impulse
     rb.AddForce(new Vector2(0,handleThrustInput()) * Time.fixedDeltaTime, ForceMode2D.Impulse);
   }
 
@@ -124,6 +126,8 @@ public class rocketScript : MonoBehaviour
     else if (Input.GetKey(KeyCode.D) && rb.velocity.y > 0) {
       transform.Translate(new Vector2(1,0)*rocketStatScript.Instance.rocketControl * Time.deltaTime);   
     }
+
+    // if velocity is zero return the rocket to the original position
     if(rb.velocity.y == 0){
       rb.velocity = Vector2.zero;
       transform.position = orgTransform;
@@ -146,13 +150,15 @@ public class rocketScript : MonoBehaviour
     }
   }
   void applyDownwardAirResistance(){
+  //if rocket going down change the air resistance to a lower value
   if(rb.velocity.y < 0){
       //air resistance on y
       var airResistance = 20f;
       Vector2 resistance = new Vector2(0f, -rb.velocity.y * airResistance);
       float distToGroundCheck = 10f;
       Debug.DrawRay(transform.position, Vector2.down * distToGroundCheck,Color.red);
-
+      
+      // use raycast to check if the rocket is closer to the ground and if closer change the air resitance to a lower value
       RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, distToGroundCheck,LayerMask.GetMask("Ground"));
       if(hit.collider != null){
         var newAirResistance = 1f;
@@ -163,5 +169,4 @@ public class rocketScript : MonoBehaviour
       rb.AddForce(resistance, ForceMode2D.Force);
     }
   }
-  
 }

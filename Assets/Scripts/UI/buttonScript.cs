@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class buttonScript : MonoBehaviour
 {
@@ -26,8 +27,14 @@ public class buttonScript : MonoBehaviour
         //when upgrade max button is click set the current fuel to max fuel because the max fuel has a new value
         rocketStatScript.Instance.currentFuel = rocketStatScript.Instance.maxFuel; 
     }
-
-
+    public void goToPlayScene()
+    {
+        SceneManager.LoadScene(1);
+    }
+    public void exitApplication()
+    {
+        Application.Quit();
+    }
     public void openShopPanelUiBtn(){
         gameUiScript.showShopPanelUi().gameObject.SetActive(true);
         gameUiScript.isShopPanelOpen = true;
