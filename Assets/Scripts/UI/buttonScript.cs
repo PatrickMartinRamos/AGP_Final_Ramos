@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -47,5 +48,11 @@ public class buttonScript : MonoBehaviour
         //reset the rocket state
         playerScoreScript.Instance.showResultPanel = false;
         playerScoreScript.Instance.hasFlown = false;
+    }
+    public void resetRocket(){
+        GameObject rocket = GameObject.Find("Rocket");
+        rocketScript.Instance.isLaunching = false;
+        rocketScript.Instance.readyTolaunch = false;
+        rocket.transform.position = rocketScript.Instance.orgTransform;
     }
 }

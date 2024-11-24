@@ -10,13 +10,13 @@ public class rocketScript : MonoBehaviour
 {
   public static rocketScript Instance;
   public bool isLaunching{get; set;} = false;
-  private bool readyTolaunch = false; //make sure that rocket wont launch until a new value for thrust is set
+  public bool readyTolaunch {get; set;}= false; //make sure that rocket wont launch until a new value for thrust is set
   private bool reverseSlider;
   private float newThrustValue;
   private Slider rocketThrustSlider;
   public Rigidbody2D rb{get; set;}
   private gameUiScript uiScript;
-  private Vector2 orgTransform;
+  public Vector2 orgTransform{get;set;}
 
   //clamp rocket in x axis
   [SerializeField]private float minX;

@@ -46,6 +46,7 @@ public class gameUiScript : MonoBehaviour
     [SerializeField] private TextMeshProUGUI finalDistanceToGroundText;
     [SerializeField] private TextMeshProUGUI defThrustValText;
     [SerializeField] private TextMeshProUGUI maxThrustValText;
+    [SerializeField] private GameObject resetButton;
     [Header("Result Panel UI")]
     [SerializeField] GameObject resultPanel;
     [SerializeField] private TextMeshProUGUI playerScoreResultText;
@@ -74,6 +75,7 @@ public class gameUiScript : MonoBehaviour
         updateRocketThrustSlider();
         updateMaxFuelText();
         updateFuelSliders();
+        resetRocketButtonUi();
     }
 #region text UI
     void followRocket(){
@@ -121,6 +123,14 @@ public class gameUiScript : MonoBehaviour
         }
         else{
             rocketThrustSlider.gameObject.SetActive(false);  //disable the slider when launching
+        }
+    }
+    public void resetRocketButtonUi(){
+        if(rocketScript.Instance.rb.velocity.y < 0){
+            resetButton.SetActive(true);
+        }
+        else if(rocketScript.Instance.rb.velocity == Vector2.zero){
+            resetButton.SetActive(false);
         }
     }
 
